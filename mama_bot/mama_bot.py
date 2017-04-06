@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+
 import discord
-from bot.utils import fflogs_api
+from utils import fflogs_api
 from discord.ext import commands
 
 

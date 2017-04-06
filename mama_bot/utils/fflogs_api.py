@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import requests
 
 class botDefaults:
@@ -16,7 +18,6 @@ class FflogsRequest:
         self.domain = 'www.fflogs.com/v1'
         self.fflogs_url = 'https://{}'.format(self.domain)
         self.session = requests.Session()
-        # TODO - API Key should come from env variable or config file
         self.api_key = ''
         self.all_encounters = self.get_all_encounters()
         self.all_specs = self.get_all_specs()
@@ -273,7 +274,7 @@ if __name__ == "__main__":
     #print(f.get_spec_name(4))
     #print(f.current_percentile_of("Roshan Crass", "Gilgamesh", "NA"))
     #print(f.get_max_encounter_per_patch("Roshan Crass", "Gilgamesh", "NA", 3.4))
-    print(f.best_percentile_of("Roshan Crass", "Gilgamesh", "NA"))
+    #print(f.best_percentile_of("Roshan Crass", "Gilgamesh", "NA"))
     #print(f.rank_of("Roshan Crass", "Gilgamesh", "NA"))
     #print (f.get_latest_encounters())
 
