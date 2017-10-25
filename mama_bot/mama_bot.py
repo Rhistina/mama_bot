@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 import discord
-from utils import fflogs_api
+from utils import fflogs
 from discord.ext import commands
 
 
 description = '''A simple Discord bot that returns FFLOGS.COM Data'''
 bot = commands.Bot(command_prefix='?', description=description)
-apiCall = fflogs_api.FflogsRequest()
-defaults = fflogs_api.botDefaults()
+apiCall = fflogs.FflogsRequest()
+defaults = fflogs.botDefaults()
 
 @bot.event
 async def on_ready():
@@ -17,10 +17,6 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-@bot.command()
-async def joined(member : discord.Member):
-    """Says when a member joined the Discord server."""
-    await bot.say('{0.name} joined in {0.joined_at}'.format(member))
 
 @bot.command()
 async def setRegion(region):
