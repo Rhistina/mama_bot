@@ -74,5 +74,22 @@ async def maxBossPatch(firstName,lastName,patch,server=None,region=None):
     message = apiCall.get_max_encounter_per_patch(name,server,region,patch)
     await bot.say(message)
 
+
+def check_thank_you(message):
+    for thank in ['thank', ' ty']:
+        if thank in message.content.lower():
+            reply = "You're welcome {}!".format(message.author.mention)
+            return reply
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    await bot.process_commands(message)
+
+    reply = check_thank_you(message)
+    if reply: await bot.send_message(message.channel, reply)
+
 # TODO - API Key should come from a config file
 bot.run('')
