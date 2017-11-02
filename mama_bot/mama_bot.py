@@ -3,11 +3,11 @@
 import discord
 from utils import fflogs
 from discord.ext import commands
-
+import os
 
 description = '''A simple Discord bot that returns FFLOGS.COM Data'''
 bot = commands.Bot(command_prefix='?', description=description)
-apiCall = fflogs.FflogsRequest()
+fflogs_request = fflogs.FflogsRequest()
 defaults = fflogs.botDefaults()
 
 @bot.event
@@ -17,57 +17,54 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
+#
+# @bot.command()
+# async def setRegion(region):
+#     """Sets the default region of the bot."""
+#     defaults.setRegion(region)
+#     await bot.say("`Set default region name to %s`" % (defaults.defaultRegion))
+#
+# @bot.command()
+# async def setServer(server):
+#     """Sets the default server of the bot."""
+#     defaults.setServer(server)
+#     await bot.say("`Set default server name to %s`" % (defaults.defaultServer))
 
 @bot.command()
-async def setRegion(region):
-    """Sets the default region of the bot."""
-    defaults.setRegion(region)
-    await bot.say("`Set default region name to %s`" % (defaults.defaultRegion))
-
-@bot.command()
-async def setServer(server):
-    """Sets the default server of the bot."""
-    defaults.setServer(server)
-    await bot.say("`Set default server name to %s`" % (defaults.defaultServer))
-
-@bot.command()
-async def rank(firstName,lastName,server=None,region=None):
+async def rank(firstName=None, lastName=None, server=None, region=None):
     """Gets the latest rankings of a character."""
-    name = firstName + " " + lastName
-    if (server == None and region == None):
-        server = defaults.defaultServer
-        region = defaults.defaultRegion
-    message = apiCall.rank_of(name,server,region)
+    if all([firstName, lastName, server, region]):
+        message = fflogs_request.rank_of("{} {}".format(firstName, lastName), server, region)
+    else:
+        message = """Usage: ?rank <firstName> <lastName> <server> <region>"""
     await bot.say(message)
 
 @bot.command()
-async def bestPct(firstName,lastName,server=None,region=None):
-    """Gets Percentile of your best HISTORICAL parses."""
-    name = firstName + " " + lastName
-    if (server == None and region == None):
-        server = defaults.defaultServer
-        region = defaults.defaultRegion
-    message = apiCall.best_percentile_of(name,server,region)
+async def bestPct(firstName=None, lastName=None, server=None, region=None):
+    """Gets the latest rankings of a character."""
+    if all([firstName, lastName, server, region]):
+        message = fflogs_request.best_percentile_of("{} {}".format(firstName, lastName), server, region)
+    else:
+        message = """Usage: ?bestPct <firstName> <lastName> <server> <region>"""
     await bot.say(message)
 
 @bot.command()
-async def curPct(firstName,lastName,server=None,region=None):
-    """Gets Percentile of your best current parses."""
-    name = firstName + " " + lastName
-    if (server == None and region == None):
-        server = defaults.defaultServer
-        region = defaults.defaultRegion
-    message = apiCall.current_percentile_of(name,server,region)
+async def curPct(firstName=None, lastName=None, server=None, region=None):
+    """Gets the latest rankings of a character."""
+    if all([firstName, lastName, server, region]):
+        message = fflogs_request.current_percentile_of("{} {}".format(firstName, lastName), server, region)
+    else:
+        message = """Usage: ?curPct <firstName> <lastName> <server> <region>"""
     await bot.say(message)
 
+
 @bot.command()
-async def maxBossPatch(firstName,lastName,patch,server=None,region=None):
-    """Gets the MAXIMUM boss defeated for this patch."""
-    name = firstName + " " + lastName
-    if (server == None and region == None):
-        server = defaults.defaultServer
-        region = defaults.defaultRegion
-    message = apiCall.get_max_encounter_per_patch(name,server,region,patch)
+async def maxBoss(firstName=None, lastName=None, server=None, region=None, patch=None):
+    """Gets the latest rankings of a character."""
+    if all([firstName, lastName, server, region, patch]):
+        message = fflogs_request.get_max_encounter_per_patch("{} {}".format(firstName, lastName), server, region, patch)
+    else:
+        message = """Usage: ?maxBoss <firstName> <lastName> <server> <region> <patch>"""
     await bot.say(message)
 
 
@@ -88,4 +85,4 @@ async def on_message(message):
     if reply: await bot.send_message(message.channel, reply)
 
 # TODO - API Key should come from a config file
-bot.run('')
+bot.run(os.getenv('DISCORD_API_KEY'))
