@@ -3,6 +3,7 @@
 import requests
 import pandas as pd
 from collections import namedtuple
+import os
 
 class botDefaults:
     defaultServer = ""
@@ -27,7 +28,7 @@ class FflogsRequest:
             'reports': '/reports',
             'report' : '/report'
         }
-        self.api_key = 'f668249d473874b93654d8ffaa7670d7'
+        self.api_key = os.getenv('FFLOGS_API_KEY')
         self.session = requests.Session()
         self.all_encounters = self.get_all_encounters()
         self.all_specs = self.get_all_specs()
